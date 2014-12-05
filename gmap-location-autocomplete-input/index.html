@@ -1,0 +1,56 @@
+
+
+				<div class="row">
+					<div class="col-md-6" >
+						<div class="input-group">
+						  <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
+						  <input type="text" class="form-control" name="map_from" placeholder="Pickup Address" id="map_from" required 
+						  ng-model="locations.from" ng-blur="changeLoc"
+						  >
+						</div>
+						<div id="map_canvas_from"  style="background-color: #EFEAE3;min-height: 112px;padding-top: 10px;z-index:0"></div>
+					</div>
+				</div>
+				
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+<script type="text/javascript">
+
+	/* Google Map API */
+	/* Map Canvas */
+    var mapOptions = {
+    center: new google.maps.LatLng(-33.8688, 151.2195),
+    zoom: 6,
+    disableDefaultUI: true
+  };
+   var map_canvas_from=new google.maps.Map(document.getElementById('map_canvas_from'),mapOptions);
+	/* Map auto complete */
+	var m_from=document.getElementById('map_from');
+
+	map_opts = {
+		componentRestrictions: {
+            country: 'us'
+        }
+    };
+
+    var location_from= new google.maps.places.Autocomplete(m_from,map_opts);
+   
+
+    //Change Auto Complete From  
+    google.maps.event.addListener(location_from, 'place_changed', function() {
+    	place=location_from.getPlace();
+    	if(place.geometry){
+    		map_canvas_from.panTo(place.geometry.location);
+    		var marker_from = new google.maps.Marker({
+			    position: place.geometry.location
+			});
+			marker_from.setMap(map_canvas_from);
+			$("#map_from").trigger('onchange');
+    	}  
+	});
+
+    
+
+
+
+</script>
